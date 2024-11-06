@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Game of Life</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+	</script>
+	<script type="text/javascript"
+	src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+</head>
+<body>
+	<div id="main-cont">
+		
+		<center id="desc">
+			<h1>Conway's Game Of Life</h1>
+			<div id="content">
+				Conway's Game of Life is a well-known cellular automaton devised by British mathematician John Conway in 1970. It demonstrates how complex, lifelike behavior can emerge from simple rules in a grid-based simulation. The "game" consists of an infinite two-dimensional grid of cells, where each cell can be either "alive" or "dead." Cells evolve over discrete time steps according to a set of basic rules, which determine each cell's state based on the states of its eight neighbors.
+				
+				<div id="sandbox-describe">
+					This sandbox lets you experiment with Conway's Game of Life (but on a finite grid with walls on four sides). Below is an $n\times n$ grid represents cells in the game, where each cell can be either "alive" (black) or "dead (white)." You can adjust the grid size by changing the number of "rows" and clicking the re-initialize button. Click on cells to toggle their states between alive and dead, then click run to see the cellular automata in action The Clear Board button clears the grid without changing the size of grid, while re-initialize redraws the board with $n$ number of rows..<br><br>
+					For more details on the working of the Cellular Automata, scroll down the the next section.
+				</div>
+
+				<center id="sandbox">
+					<h2>Sandbox</h2>
+					<div id="sandbox-cont">
+						<div id="sb-left">
+							<div id="board" class="board"></div>
+									<div id="generation">Generation: 0</div>
+							<div id="controls" class="controls">
+								<div id="init">
+									<label for="number">Number of rows</label>
+									<input type="number" id="number" value="30"></input>
+									<button onclick="initialize()">Re-initialize</button>
+									<button onclick="clearBoard()">Clear Board</button>
+								</div>
+								<div id="runs">
+									<button onclick="random()">Random</button>
+								<!-- <button onclick="synchronous()">Synchronous Run</button> -->
+									<button onclick="start()">Run</button>
+									<button onclick="stop()">Stop</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</center>
+				<center><h2>Update Rules for the Cellular Automata</h2></center>
+				The rules for evolution in Conway's Game of Life are as follows:<br>
+				<ol>
+					<li> A live cell with 2 or 3 live neighbors remains alive. </li>
+					<li> Death: A live cell with fewer than 2 (underpopulation) or more than 3 neighbors (overpopulation) dies.</li>
+					<li> Birth: A dead cell with exactly 3 live neighbors becomes alive.</li>
+				</ol>
+
+				Despite the simplicity of these rules, Conway's Game of Life can produce complex, self-sustaining patterns that have intrigued scientists, mathematicians, and computer enthusiasts for decades. The game has notable patterns that emerge:<br>
+
+				Still Lifes: Stable patterns that do not change over time (e.g., the "block" and "beehive").<br>
+				Oscillators: Patterns that cycle through a series of states, returning to their original form after a fixed number of steps (e.g., the "blinker" and "toad").<br>
+				Spaceships: Moving patterns that translate themselves across the grid over time (e.g., the "glider" and "lightweight spaceship").
+				<center><h2> Some patterns in Cellular Automata</h2></center>
+				(All tables credits: Wikipedia)
+				<table class="col-begin" role="presentation" style="width: auto; margin:auto;">
+
+					<tbody><tr>
+					<td class="col-break">
+					<table class="wikitable">
+					
+					<tbody><tr>
+					<th colspan="2">Still lifes
+					</th></tr>
+					<tr>
+					<td>Block
+					</td>
+					<td><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Game_of_life_block_with_border.svg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/9/96/Game_of_life_block_with_border.svg/66px-Game_of_life_block_with_border.svg.png" decoding="async" width="66" height="66" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/9/96/Game_of_life_block_with_border.svg/99px-Game_of_life_block_with_border.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/9/96/Game_of_life_block_with_border.svg/132px-Game_of_life_block_with_border.svg.png 2x" data-file-width="66" data-file-height="66"></a></span>
+					</td></tr>
+					<tr>
+					<td>Bee-<br>hive
+					</td>
+					<td><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Game_of_life_beehive.svg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/6/67/Game_of_life_beehive.svg/98px-Game_of_life_beehive.svg.png" decoding="async" width="98" height="82" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/6/67/Game_of_life_beehive.svg/147px-Game_of_life_beehive.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/6/67/Game_of_life_beehive.svg/196px-Game_of_life_beehive.svg.png 2x" data-file-width="98" data-file-height="82"></a></span>
+					</td></tr>
+					<tr>
+					<td>Loaf
+					</td>
+					<td><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Game_of_life_loaf.svg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Game_of_life_loaf.svg/98px-Game_of_life_loaf.svg.png" decoding="async" width="98" height="98" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Game_of_life_loaf.svg/147px-Game_of_life_loaf.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Game_of_life_loaf.svg/196px-Game_of_life_loaf.svg.png 2x" data-file-width="98" data-file-height="98"></a></span>
+					</td></tr>
+					<tr>
+					<td>Boat
+					</td>
+					<td><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Game_of_life_boat.svg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Game_of_life_boat.svg/82px-Game_of_life_boat.svg.png" decoding="async" width="82" height="82" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Game_of_life_boat.svg/123px-Game_of_life_boat.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Game_of_life_boat.svg/164px-Game_of_life_boat.svg.png 2x" data-file-width="82" data-file-height="82"></a></span>
+					</td></tr>
+					<tr>
+					<td>Tub
+					</td>
+					<td><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Game_of_life_flower.svg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/3/31/Game_of_life_flower.svg/82px-Game_of_life_flower.svg.png" decoding="async" width="82" height="82" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/3/31/Game_of_life_flower.svg/123px-Game_of_life_flower.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/3/31/Game_of_life_flower.svg/164px-Game_of_life_flower.svg.png 2x" data-file-width="82" data-file-height="82"></a></span>
+					</td></tr></tbody></table>
+					</td>
+					<td class="col-break" style="padding-left: 1em;">
+					<table class="wikitable">
+					
+					<tbody><tr>
+					<th>Oscillators
+					</th></tr>
+					<tr>
+					<td>Blinker<br>(period 2)
+					</td>
+					<td><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Game_of_life_blinker.gif" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/9/95/Game_of_life_blinker.gif" decoding="async" width="82" height="82" class="mw-file-element" data-file-width="82" data-file-height="82"></a></span>
+					</td></tr>
+					<tr>
+					<td>Toad<br>(period 2)
+					</td>
+					<td><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Game_of_life_toad.gif" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/1/12/Game_of_life_toad.gif" decoding="async" width="98" height="98" class="mw-file-element" data-file-width="98" data-file-height="98"></a></span>
+					</td></tr>
+					<tr>
+					<td>Beacon<br>(period 2)
+					</td>
+					<td><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Game_of_life_beacon.gif" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/1/1c/Game_of_life_beacon.gif" decoding="async" width="98" height="98" class="mw-file-element" data-file-width="98" data-file-height="98"></a></span>
+					</td></tr>
+					<tr>
+					<td>Pulsar<br>(period 3)
+					</td>
+					<td><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Game_of_life_pulsar.gif" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/0/07/Game_of_life_pulsar.gif" decoding="async" width="137" height="137" class="mw-file-element" data-file-width="137" data-file-height="137"></a></span>
+					</td></tr>
+					<tr>
+					<td>Penta-<br>decathlon<br>(period&nbsp;15)
+					</td>
+					<td><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:I-Column.gif" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/f/fb/I-Column.gif" decoding="async" width="89" height="145" class="mw-file-element" data-file-width="89" data-file-height="145"></a></span>
+					</td></tr></tbody></table>
+					</td>
+					<td class="col-break" style="padding-left: 1em;">
+					<table class="wikitable">
+					
+					<tbody><tr>
+					<th>Spaceships
+					</th></tr>
+					<tr>
+					<td>Glider
+					</td>
+					<td><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Game_of_life_animated_glider.gif" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/f/f2/Game_of_life_animated_glider.gif" decoding="async" width="84" height="84" class="mw-file-element" data-file-width="84" data-file-height="84"></a></span>
+					</td></tr>
+					<tr>
+					<td>Light-<br>weight<br>spaceship<br>(LWSS)
+					</td>
+					<td><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Game_of_life_animated_LWSS.gif" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/3/37/Game_of_life_animated_LWSS.gif" decoding="async" width="126" height="98" class="mw-file-element" data-file-width="126" data-file-height="98"></a></span>
+					</td></tr>
+					<tr>
+					<td>Middle-<br>weight<br>spaceship<br>(MWSS)
+					</td>
+					<td><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Animated_Mwss.gif" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/4/4e/Animated_Mwss.gif" decoding="async" width="162" height="146" class="mw-file-element" data-file-width="162" data-file-height="146"></a></span>
+					</td></tr>
+					<tr>
+					<td>Heavy-<br>weight<br>spaceship<br>(HWSS)
+					</td>
+					<td><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Animated_Hwss.gif" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/4/4f/Animated_Hwss.gif" decoding="async" width="178" height="146" class="mw-file-element" data-file-width="178" data-file-height="146"></a></span>
+					</td></tr></tbody></table>
+					<p> 
+					</p>
+					</td></tr></tbody></table>
+					Patterns which evolve for long periods before stabilizing are called Methuselahs,
+					<table style="margin:auto; text-align:center;">
+
+						<tbody><tr>
+						<td><figure typeof="mw:File/Frame"><a href="/wiki/File:Game_of_life_fpento.svg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Game_of_life_fpento.svg/82px-Game_of_life_fpento.svg.png" decoding="async" width="82" height="82" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Game_of_life_fpento.svg/123px-Game_of_life_fpento.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Game_of_life_fpento.svg/164px-Game_of_life_fpento.svg.png 2x" data-file-width="82" data-file-height="82"></a><figcaption>The R-pentomino</figcaption></figure>
+						</td>
+						<td><figure typeof="mw:File/Frame"><a href="/wiki/File:Game_of_life_diehard.svg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/9/99/Game_of_life_diehard.svg/162px-Game_of_life_diehard.svg.png" decoding="async" width="162" height="82" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/9/99/Game_of_life_diehard.svg/243px-Game_of_life_diehard.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/9/99/Game_of_life_diehard.svg/324px-Game_of_life_diehard.svg.png 2x" data-file-width="162" data-file-height="82"></a><figcaption>Diehard</figcaption></figure>
+						</td>
+						<td><figure typeof="mw:File/Frame"><a href="/wiki/File:Game_of_life_acorn.svg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Game_of_life_acorn.svg/146px-Game_of_life_acorn.svg.png" decoding="async" width="146" height="82" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Game_of_life_acorn.svg/219px-Game_of_life_acorn.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Game_of_life_acorn.svg/292px-Game_of_life_acorn.svg.png 2x" data-file-width="146" data-file-height="82"></a><figcaption>Acorn</figcaption></figure>
+						</td></tr></tbody></table>
+						All three of the patterns shown below grow indefinitely.
+						<table style="margin:auto; text-align:center;">
+
+							<tbody><tr>
+							<td><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Game_of_life_infinite1.svg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/7/72/Game_of_life_infinite1.svg/162px-Game_of_life_infinite1.svg.png" decoding="async" width="162" height="130" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/7/72/Game_of_life_infinite1.svg/243px-Game_of_life_infinite1.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/7/72/Game_of_life_infinite1.svg/324px-Game_of_life_infinite1.svg.png 2x" data-file-width="162" data-file-height="130"></a></span> <span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Game_of_life_infinite2.svg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Game_of_life_infinite2.svg/114px-Game_of_life_infinite2.svg.png" decoding="async" width="114" height="114" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Game_of_life_infinite2.svg/171px-Game_of_life_infinite2.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Game_of_life_infinite2.svg/228px-Game_of_life_infinite2.svg.png 2x" data-file-width="114" data-file-height="114"></a></span>
+							</td></tr>
+							<tr>
+							<td><br><span class="mw-default-size" typeof="mw:File"><a href="/wiki/File:Game_of_life_infinite3.svg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/9/95/Game_of_life_infinite3.svg/658px-Game_of_life_infinite3.svg.png" decoding="async" width="658" height="50" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/9/95/Game_of_life_infinite3.svg/987px-Game_of_life_infinite3.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/9/95/Game_of_life_infinite3.svg/1316px-Game_of_life_infinite3.svg.png 2x" data-file-width="658" data-file-height="50"></a></span>
+							</td></tr></tbody></table>
+	</div>
+</body>
+<script type="text/javascript" src="main.js"></script>
+</html>
