@@ -82,7 +82,7 @@ button:hover{
 }
 
 .board{
-	height: 65vh;
+	height: min(65vh, 80vw);
 	aspect-ratio: 1;
 	display: grid;
 	grid-template-columns: repeat(var(--x), 1fr);
@@ -178,4 +178,10 @@ li{
 	width: 13%;
 	border-radius: 10px;
 	margin-top: 10px;
+}
+
+@media screen and (max-width: 1000px){
+	button{
+		width: 25vw;
+	}
 }
