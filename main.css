@@ -9,10 +9,6 @@
 	--x: 8;
 }
 
-*{
-	transition: all 0.1s;
-}
-
 body, html{
 	height: 100vh;
 	padding: 0;
@@ -128,7 +124,7 @@ button:hover{
 }
 
 .board> .tile:hover{
-	opacity:0.1;
+	opacity:0.8;
 }
 
 .controls{
