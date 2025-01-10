@@ -19,6 +19,19 @@ function toggle(i, j){
 	}
 }
 
+function renderBoard() {
+    clearTimeout(t);
+    const board = document.getElementById("board");
+    let tiles = '';
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+            const color = grid[i][j] === white ? "black" : "white";
+            tiles += `<div id="t_${i}_${j}" class="tile" style="background-color:${color}" onclick="toggle(${i}, ${j})"></div>`;
+        }
+    }
+    board.innerHTML = tiles;
+}
+
 function clearBoard(){
 	clearTimeout(t);
 	gen = 0;
@@ -55,69 +68,55 @@ function random(){
 			grid[i].push((Math.random()>=0.5)? 1 : 0);
 		}
 	}
-	for(i=0;i<n;i++){
-		for (j = 0; j < n; j++){
-			if(grid[i][j] == 1){document.getElementById(`t_${i}_${j}`).style.backgroundColor = "black"; }
-			else {document.getElementById(`t_${i}_${j}`).style.backgroundColor = "white";}
-		}
-	}
+	renderBoard();
 }
 
-function start(){
-	var sum = 0;
-	gen = gen+1;
-	document.getElementById("generation").innerHTML="Generation: " + gen;
-	temp = []
-	temp.push([])
-	for(i=0;i<n;i++){
-		temp[0].push(0);
-	}
-	for(i=1;i<n-1;i++){
-		temp.push([]);
-		temp[i].push(0);
-		for(j=1;j<n;j++){
-			sum = 0;
-			for(x=-1;x<=1;x++){
-				for(y=-1;y<=1;y++){
-					sum = sum + grid[i+x][j+y];
-				}
-			}
+function start() {
+    var sum = 0;
+    gen = gen + 1;
+    document.getElementById("generation").innerHTML = "Generation: " + gen;
 
-			sum = sum-grid[i][j];
-			
-			if(grid[i][j] == 0){
-				if(sum == 3){
-					temp[i].push(1);
-				}
-				else{
-					temp[i].push(0);
-				}
-			}
-			else{
-				if(sum >3 || sum<2){
-					temp[i].push(0);
-				}
-				else{
-					temp[i].push(1);
-				}
-			}
-		}
-		temp[i].push([0])
-	}
-	temp.push([])
-	for(j=0;j<n;j++){
-		temp[n-1].push(0);
-	}
+    let temp = [];
+    for (i = 0; i < n; i++) {
+        temp.push([]);
+        for (j = 0; j < n; j++) {
+            temp[i].push(0);
+        }
+    }
 
-	grid = [...temp];
-	for(i=0;i<n;i++){
-		for (j = 0; j < n; j++){
-			if(grid[i][j] == 1){document.getElementById(`t_${i}_${j}`).style.backgroundColor = "black"; }
-			else {document.getElementById(`t_${i}_${j}`).style.backgroundColor = "white";}
-		}
-	}
-	t = setTimeout(function(){start();}, 200);
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            sum = 0;
+            for (x = -1; x <= 1; x++) {
+                for (y = -1; y <= 1; y++) {
+                    let ni = (i + x + n) % n; 
+                    let nj = (j + y + n) % n; 
+                    sum += grid[ni][nj];
+                }
+            }
+
+            sum -= grid[i][j]; 
+
+            if (grid[i][j] == 0) {
+                if (sum == 3) {
+                    temp[i][j] = 1; 
+                }
+            } else {
+                if (sum < 2 || sum > 3) {
+                    temp[i][j] = 0; 
+                } else {
+                    temp[i][j] = 1; 
+                }
+            }
+        }
+    }
+
+    grid = temp;
+    renderBoard();
+
+    t = setTimeout(function () { start(); }, 200);
 }
+
 
 function stop(){
 	clearTimeout(t)
@@ -129,4 +128,91 @@ function stop(){
 initialize();
 
 
+function savePattern() {
+    const pattern = {
+        size: n,
+        grid: grid
+    };
+    const blob = new Blob([JSON.stringify(pattern)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "pattern.gol";
+    a.click();
+    URL.revokeObjectURL(a.href);
+}
+
+
+function loadPattern(event) {
+    const file = event.target.files[0];
+    if (!file) {
+        alert("No file selected!");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        try {
+            const content = JSON.parse(e.target.result);
+
+            // Validate the JSON structure
+            if (!content.size || !Array.isArray(content.grid)) {
+                throw new Error("Invalid file format");
+            }
+
+            n = content.size;
+            grid = content.grid;
+
+            // Update board dimensions and render the saved pattern
+            document.documentElement.style.setProperty('--x', n);
+			document.getElementById("number").value = n;
+			document.getElementById("generation").innerHTML = 'Generation: 0';
+			gen=0;
+            renderBoard();
+        } catch (error) {
+            alert("Invalid file format! " + error.message);
+        }
+    };
+    reader.readAsText(file);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const fileInput = document.getElementById("fileInput");
+    if (fileInput) {
+        fileInput.addEventListener("change", loadPattern);
+    }
+});
+
+document.getElementById("customFileButton").addEventListener("click", function () {
+    document.getElementById("fileInput").click();
+});
+
+async function loadPatternFromServer(filename) {
+    try {
+        // Fetch the file content from the server
+        const response = await fetch(`${filename}`);
+        if (!response.ok) {
+            throw new Error('Failed to load the pattern file.');
+        }
+
+        const content = await response.json();
+
+        // Validate the file content
+        if (!content.size || !Array.isArray(content.grid)) {
+            throw new Error('Invalid pattern file format.');
+        }
+
+        // Update the grid and board
+        n = content.size;
+        grid = content.grid;
+
+        // Update board dimensions and render the pattern
+        document.documentElement.style.setProperty('--x', n);
+		document.getElementById("number").value = n;
+		document.getElementById("generation").innerHTML = 'Generation: 0';
+		gen=0;
+		renderBoard();
+    } catch (error) {
+        alert(`Error loading pattern: ${error.message}`);
+    }
+}
 

@@ -1,3 +1,5 @@
+---
+---
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +25,7 @@
 				Conway's Game of Life is a well-known cellular automaton devised by British mathematician John Conway in 1970. It demonstrates how complex, lifelike behavior can emerge from simple rules in a grid-based simulation. The "game" consists of an infinite two-dimensional grid of cells, where each cell can be either "alive" or "dead." Cells evolve over discrete time steps according to a set of basic rules, which determine each cell's state based on the states of its eight neighbors.
 				
 				<div id="sandbox-describe">
-					This sandbox lets you experiment with Conway's Game of Life (but on a finite grid with walls on four sides). Below is an $n\times n$ grid represents cells in the game, where each cell can be either "alive" (black) or "dead (white)." You can adjust the grid size by changing the number of "rows" and clicking the re-initialize button. Click on cells to toggle their states between alive and dead, then click run to see the cellular automata in action The Clear Board button clears the grid without changing the size of grid, while re-initialize redraws the board with $n$ number of rows..<br><br>
+					This sandbox lets you experiment with Conway's Game of Life (but on a finite grid with periodic boundary conditions). Below is an $n\times n$ grid represents cells in the game, where each cell can be either "alive" (black) or "dead (white)." You can adjust the grid size by changing the number of "rows" and clicking the re-initialize button. Click on cells to toggle their states between alive and dead, then click run to see the cellular automata in action The Clear Board button clears the grid without changing the size of grid, while re-initialize redraws the board with $n$ number of rows..<br><br>
 					For more details on the working of the Cellular Automata, scroll down the the next section.
 				</div>
 
@@ -44,11 +46,23 @@
 									<button onclick="random()">Random</button>
 								<!-- <button onclick="synchronous()">Synchronous Run</button> -->
 									<button onclick="start()">Run</button>
-									<button onclick="stop()">Stop</button>
+									<button onclick="stop()">Stop</button><br><br>
+									<button onclick="savePattern()">Save Pattern</button>
+									<button id="customFileButton">Upload Pattern</button>
+									<input type="file" id="fileInput" style="opacity: 0; position: absolute; z-index: 1;" accept=".gol" />
 								</div>
 							</div>
 						</div>
-					</div>
+						
+						<h3 style="margin:10px">Few saved patterns</h3>
+						<div class="patterns-container">
+							{% for file in site.static_files %}
+								{% if file.path contains 'patterns/' %}
+									<button onclick="loadPatternFromServer( '{{ file.path }}' )" style="margin-bottom: 10px">{{ file.name | remove: '.gol' }}</button>
+								{% endif %}
+							{% endfor %}	
+						</div>
+					</div>				
 				</center>
 				<center><h2>Update Rules for the Cellular Automata</h2></center>
 				The rules for evolution in Conway's Game of Life are as follows:<br>
